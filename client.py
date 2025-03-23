@@ -5,7 +5,6 @@ from mcp.client.stdio import stdio_client
 server_params = StdioServerParameters(
     command="mcp",  # Executable
     args=["run", "server.py"], 
-    env=None,  # Optional environment variables
 )
 
 
@@ -19,9 +18,22 @@ async def run():
             await session.initialize()
 
             # List available tools
-            tools = await session.list_tools()
+            response = await session.list_tools()
 
-            print(tools)
+            # getting tool name
+            tool_name = response.tools[0].name # 'say_hello'
+
+            # defining tool argument
+            tool_args = {'name': 'Daniel'}
+
+            #calling tool
+            response = await session.call_tool(tool_name, tool_args)
+
+            # printing response
+            print(response.content)
+
+
+
 
 
 if __name__ == "__main__":
